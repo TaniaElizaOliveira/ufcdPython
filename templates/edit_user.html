@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="row">
+  <div class="col-5 mx-auto">
+    <h3>Editar Atleta</h3><hr>
+    <form method="post" action="{{ url_for('edit_user', id=datas.ID) }}">
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" name="nome" value="{{ datas.NOME }}" required class="form-control">      
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" name="email" value="{{ datas.EMAIL }}" required class="form-control">      
+      </div>
+      <div class="form-group">
+        <label for="modalidade">Modalidade do Atleta</label>
+        <input type="text" name="modalidade" value="{{ datas.MODALIDADE }}" required class="form-control">      
+      </div>
+      <div class="form-group">
+        <label for="endereco">Endereço</label>
+        <input type="text" name="endereco" value="{{ datas.ENDERECO }}" required class="form-control">      
+      </div>
+      <div class="form-group">
+        <label for="cidade">Cidade</label>
+        <input type="text" name="cidade" value="{{ datas.CIDADE }}" required class="form-control">      
+      </div><br>
+      <input type="submit" value="Confirmar" class="btn btn-primary">
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+/* styles.css */
+.pt-3 {
+  
+}
+
+.table {
+  color: white;
+}
+
+.table thead th {
+  color: black;
+}
+
+.alert {
+  color: white;
+  background-color: #00ff00; /* cor verde neon */
+  border-color: #00ff00;
+}
