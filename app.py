@@ -1,9 +1,75 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3 as sql
+from login_database import create_login_tables
 
 app = Flask(__name__)
+app.secret_key = "admin123"
+
+# Chamar a função para criar as tabelas de login
+create_login_tables()
+
+# Função para verificar o login do usuário
+def verify_login(username, password):
+    with sql.connect("login_db.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM ATHLETES WHERE USERNAME=? AND PASSWORD=?", (username, password))
+        user = cur.fetchone()
+        if user:
+            return user, "athlete"
+        else:
+            cur.execute("SELECT * FROM COACHES WHERE USERNAME=? AND PASSWORD=?", (username, password))
+            user = cur.fetchone()
+            if user:
+                return user, "coach"
+            else:
+                return None, None
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        user, user_type = verify_login(username, password)
+        if user:
+            flash("Login bem-sucedido!", "success")
+            return redirect(url_for("index"))
+        else:
+            flash("Nome de usuário ou senha incorretos", "error")
+
+    return render_template("login.html")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+
+        if password != confirm_password:
+            flash("As senhas não coincidem", "error")
+            return redirect(url_for("register"))
+
+        # Verificar se o usuário já existe
+        with sql.connect("login_db.db") as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM ATHLETES WHERE USERNAME=?", (username,))
+            existing_user = cur.fetchone()
+            if existing_user:
+                flash("Nome de usuário já em uso", "error")
+                return redirect(url_for("register"))
+            else:
+                cur.execute("INSERT INTO ATHLETES (USERNAME, PASSWORD) VALUES (?, ?)", (username, password))
+                con.commit()
+                flash("Usuário cadastrado com sucesso", "success")
+                return redirect(url_for("login"))
+
+    return render_template("register.html")
 
 @app.route("/")
+def redirect_to_login():
+    return redirect(url_for("login"))
+
 @app.route("/index")
 def index():
     with sql.connect("form_db.db") as con:
@@ -64,5 +130,4 @@ def delete_user(id):
     return redirect(url_for("index"))
 
 if __name__ == '__main__':
-    app.secret_key = "admin123"
     app.run(debug=True)
