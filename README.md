@@ -14,4 +14,4 @@ Este é um projeto de gerenciamento de atletas desenvolvido em Python utilizando
 
 Assista a uma demonstração do projeto no vídeo abaixo:
 
-[![Assista ao vídeo](https://img.youtube.com/vi/EzUm9a0QbhE/0.jpg)](https://youtu.be/EzUm9a0QbhE)
+[![Assista ao vídeo](https://img.youtube.com/vi/Qu0rbEX8ij8/0.jpg)](https://youtu.be/Qu0rbEX8ij8)
